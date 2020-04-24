@@ -15,7 +15,7 @@ function preload() {
 
 function setup() {
   createCanvas(720, 720);
-  socket = io.connect('http://192.168.178.58:3000');
+  socket = io.connect(window.location.origin);
 
   this.player = this.board.player;
   background(this.bgImg);
