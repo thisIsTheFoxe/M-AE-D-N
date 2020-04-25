@@ -48,6 +48,11 @@ io.sockets.on(
         io.sockets.emit('update', { player: player, currentPlayer: currentPlayer });
       });
 
+      socket.on('movePin', data => {
+        console.log('movePin:');
+        io.sockets.emit('movePin', data);
+      });
+
       socket.on('disconnect', function() {
         let playerNr = connectedPlayer.indexOf(socket.id)
         if (playerNr >= 0){
