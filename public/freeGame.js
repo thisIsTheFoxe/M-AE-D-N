@@ -7,9 +7,10 @@ var rollTimer = 0;
 var socket;
 
 function preload() {
-  let url = './board6.json';
+  let board = getURLParams().b;
+  let url = `./board/${board}.json`;
   this.board = loadJSON(url);
-  this.bgImg = loadImage('./board6.svg');
+  this.bgImg = loadImage(`./board/${board}.jpg`);
 }
 
 function setup() {

@@ -8,9 +8,10 @@ var socket;
 var noRollsLeft = 1;
 
 function preload() {
-  let url = './board6.json';
+  let board = getURLParams().b;
+  let url = `./board/${board}.json`;
   this.board = loadJSON(url);
-  this.bgImg = loadImage('./board6.svg');
+  this.bgImg = loadImage(`./board/${board}.jpg`);
 }
 
 function setup() {
@@ -68,7 +69,7 @@ function draw() {
         pos = p.start[inHouseIx++];
       } else {
         let newPosIx;
-        if (pos >= 48) {
+        if (pos >= this.board.fieldCount) {
           newPosIx = pos + me * 4;
         } else {
           newPosIx = (pos + p.startFieldIx) % this.board.fieldCount;
@@ -108,7 +109,7 @@ function touchEnded() {
         let pos = player[me].pos[i];
         if (pos === -1) {
           pos = player[me].start[inHouseIx++];
-        } else if (pos >= 48) {
+        } else if (pos >= this.board.fieldCount) {
           let newPosIx = pos + me * 4;
           pos = this.board.fields[newPosIx];
         } else {
@@ -120,7 +121,7 @@ function touchEnded() {
         if (d < 22) {
           if (player[me].pos[i] === -1 && roll === 6) {
             player[me].pos[i] = 0;
-          } else if (player[me].pos[i] + roll > 48 + 3 || player[me].pos[i] === -1) {
+          } else if (player[me].pos[i] + roll > this.board.fieldCount + 3 || player[me].pos[i] === -1) {
             continue;
           } else {
             player[me].pos[i] += roll;
