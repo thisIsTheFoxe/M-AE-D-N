@@ -5,6 +5,7 @@ var roll = -1;
 var selectedPin = -1;
 var rollTimer = 0;
 var socket;
+var diceColor;
 
 function preload() {
   let board = getURLParams().b;
@@ -41,6 +42,7 @@ function setup() {
   socket.on('roll', function (data) {
     console.log('ROLL=' + data);
     roll = data;
+    diceColor = color(random(128, 255),random(128, 255),random(128, 255));
   });
 
   socket.on('update', function (data) {
@@ -83,23 +85,27 @@ function draw() {
 }
 
 function drawDice() {
-  fill(roll !== -1 ? 255 : 200);
+
+  if (this.rollTimer > 0) {
+    this.diceColor = 255;
+    this.roll = Math.floor(Math.random() * 6) + 1;
+  
+    if (this.rollTimer === 1) {
+      socket.emit('roll', this.roll);
+    }
+    this.rollTimer -= 1;
+  } 
+  
+  fill(this.roll !== -1 ? this.diceColor : 200);
 
   rect(width / 2 - 35, height / 2 - 35, 70, 70, 20);
   strokeWeight(0);
   fill(0);
   textSize(25);
-  if (rollTimer > 0) {
-    roll = Math.floor(Math.random() * 6) + 1;
-    if (rollTimer == 1){
-      socket.emit('roll', roll);
-    }
-    rollTimer -= 1;
-  }
-  text(roll == -1 ? "?" : roll, width / 2 - 7, height / 2 + 10);
+  text(this.roll == -1 ? "?" : this.roll, width / 2 - 7, height / 2 + 10);
 
   button = createButton('reset');
-  button.position(width / 2 - 12, height / 2 + 50);
+  button.position(width / 2 - 22, height / 2 - 50);
   button.mousePressed(resetDice);
 }
 
